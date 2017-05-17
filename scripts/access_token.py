@@ -6,8 +6,12 @@ import urllib
 import urllib2
 import json
 import encrypt
+import os
 
-with open("auth.json") as f:
+ROOT = os.path.dirname(os.path.abspath(__file__))
+filePath = ROOT + "/auth.json"
+
+with open(filePath) as f:
     auth_key = json.load(f)
 
 def AuthService():
@@ -23,10 +27,10 @@ def AuthService():
     params = json.loads(response_data.read())
 
     auth_key["acess_token"] = encrypt.str_encode(params["access_token"])
-    with open("auth.json",'w') as f:
-    	json.dump(auth_key, f, indent = 2, sort_keys = True)
+    with open(filePath,'w') as f:
+        json.dump(auth_key, f, indent = 2, sort_keys = True)
 
     return params["access_token"]
 
 if __name__ == '__main__':
-	print AuthService()
+    print AuthService()
